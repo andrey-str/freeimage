@@ -25,6 +25,8 @@ LIBRARIES_X86_64 = -Wl,-syslibroot /Applications/Xcode.app/Contents/Developer/Pl
 LIBTOOL = libtool
 LIPO = lipo
 
+LIBTOOLFLAGS_SHARED = -dynamic -flat_namespace -install_name @executable_path/../Frameworks/libfreeimage.3.dylib -compatibility_version 3.0.0 -current_version 3.15.4
+
 TARGET = freeimage
 STATICLIB = lib$(TARGET).a
 SHAREDLIB = lib$(TARGET)-$(VER_MAJOR).$(VER_MINOR).dylib
@@ -65,10 +67,10 @@ $(SHAREDLIB): $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
 	$(LIPO) -create $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64 -output $(SHAREDLIB)
 
 $(SHAREDLIB)-i386: $(MODULES_I386)
-	$(CPP_I386) -arch i386 -dynamiclib $(LIBRARIES_I386) -o $@ $(MODULES_I386)
+	$(CPP_I386) -arch i386 -dynamiclib $(LIBTOOLFLAGS_SHARED) $(LIBRARIES_I386) -o $@ $(MODULES_I386)
 
 $(SHAREDLIB)-x86_64: $(MODULES_X86_64)
-	$(CPP_X86_64) -arch x86_64 -dynamiclib $(LIBRARIES_X86_64) -o $@ $(MODULES_X86_64)
+	$(CPP_X86_64) -arch x86_64 -dynamiclib $(LIBTOOLFLAGS_SHARED) $(LIBRARIES_X86_64) -o $@ $(MODULES_X86_64)
 
 .c.o-i386:
 	$(CC_I386) $(CFLAGS_I386) -c $< -o $@
