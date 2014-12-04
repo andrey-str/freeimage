@@ -50,8 +50,9 @@ default: all
 all: dist
 
 dist: FreeImage
-	cp *.a Dist
-	cp *.dylib Dist
+	mkdir -p Dist
+	mv *.a* Dist
+	mv *.dylib Dist
 	cp Source/FreeImage.h Dist
 
 FreeImage: $(STATICLIB) $(SHAREDLIB)
