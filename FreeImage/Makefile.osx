@@ -5,7 +5,8 @@
 include Makefile.srcs
 
 # General configuration variables:
-SDK_PATH = $(shell xcodebuild -version -sdk macosx10.9 Path)
+SDK_PARAM = $(shell xcodebuild -showsdks | awk '/^$$/{p=0};p; /OS X SDKs:/{p=1}' | tail -1 | cut -f3)
+SDK_PATH = $(shell xcodebuild -version $(SDK_PARAM) Path)
 CC_I386 = gcc
 CC_X86_64 = gcc
 CPP_I386 = g++
