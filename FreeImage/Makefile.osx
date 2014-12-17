@@ -11,7 +11,7 @@ CC_I386 = gcc
 CC_X86_64 = gcc
 CPP_I386 = g++
 CPP_X86_64 = g++
-COMPILERFLAGS = -Os -fexceptions -fvisibility=hidden -DNO_LCMS
+COMPILERFLAGS = -Os -fexceptions -fvisibility=hidden -DNO_LCMS -D__ANSI__ -DDISABLE_PERF_MEASUREMENT
 COMPILERFLAGS_I386 = -arch i386
 COMPILERFLAGS_X86_64 = -arch x86_64
 COMPILERPPFLAGS = -Wno-ctor-dtor-privacy
@@ -27,7 +27,7 @@ LIBRARIES_X86_64 = -Wl,-syslibroot $(SDK_PATH)
 LIBTOOL = libtool
 LIPO = lipo
 
-LIBTOOLFLAGS_SHARED = -dynamic -flat_namespace -install_name @executable_path/../Frameworks/libfreeimage.3.dylib -compatibility_version 3.0.0 -current_version 3.15.4
+LIBTOOLFLAGS_SHARED = -dynamic -flat_namespace -install_name @executable_path/../Frameworks/libfreeimage.$(VER_MAJOR).dylib -compatibility_version $(VER_MAJOR).0.0 -current_version $(VER_MAJOR).$(VER_MINOR)
 
 TARGET = freeimage
 STATICLIB = lib$(TARGET).a
@@ -41,8 +41,9 @@ MODULES_X86_64 = $(SRCS:.c=.o-x86_64)
 MODULES_I386 := $(MODULES_I386:.cpp=.o-i386)
 MODULES_X86_64 := $(MODULES_X86_64:.cpp=.o-x86_64)
 
+#PREFIX = /usr/local
 PREFIX = @executable_path/../Frameworks
-INSTALLDIR = $(PREFIX)
+INSTALLDIR = $(PREFIX)/lib
 INCDIR = $(PREFIX)/include
 
 default: all
@@ -95,4 +96,4 @@ install:
 	#ln -sf $(SHAREDLIB) $(INSTALLDIR)/$(LIBNAME)
 
 clean:
-	rm -f core Dist/*.* u2dtmp* $(MODULES_PPC) $(MODULES_I386) $(MODULES_X86_64) $(STATICLIB) $(STATICLIB)-ppc $(STATICLIB)-i386 $(SHAREDLIB) $(SHAREDLIB)-ppc $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
+	rm -f core Dist/*.* u2dtmp* $(MODULES_I386) $(MODULES_X86_64) $(STATICLIB) $(STATICLIB)-i386 $(SHAREDLIB) $(SHAREDLIB)-i386 $(SHAREDLIB)-x86_64
