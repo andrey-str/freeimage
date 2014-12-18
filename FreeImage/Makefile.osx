@@ -5,6 +5,8 @@
 include Makefile.srcs
 
 # General configuration variables:
+SDK_PARAM = $(shell xcodebuild -showsdks | awk '/^$$/{p=0};p; /OS X SDKs:/{p=1}' | tail -1 | cut -f3)
+SDK_PATH = $(shell xcodebuild -version $(SDK_PARAM) Path)
 CC_I386 = gcc
 CC_X86_64 = gcc
 CPP_I386 = g++
@@ -14,14 +16,14 @@ COMPILERFLAGS_I386 = -arch i386
 COMPILERFLAGS_X86_64 = -arch x86_64
 COMPILERPPFLAGS = -Wno-ctor-dtor-privacy
 INCLUDE += 
-INCLUDE_I386 = -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
-INCLUDE_X86_64 = -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
+INCLUDE_I386 = -isysroot $(SDK_PATH)
+INCLUDE_X86_64 = -isysroot $(SDK_PATH)
 CFLAGS_I386 = $(COMPILERFLAGS) $(COMPILERFLAGS_I386) $(INCLUDE) $(INCLUDE_I386)
 CFLAGS_X86_64 = $(COMPILERFLAGS) $(COMPILERFLAGS_X86_64) $(INCLUDE) $(INCLUDE_X86_64)
 CPPFLAGS_I386 = $(COMPILERPPFLAGS) $(CFLAGS_I386)
 CPPFLAGS_X86_64 = $(COMPILERPPFLAGS) $(CFLAGS_X86_64)
-LIBRARIES_I386 = -Wl,-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
-LIBRARIES_X86_64 = -Wl,-syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
+LIBRARIES_I386 = -Wl,-syslibroot $(SDK_PATH)
+LIBRARIES_X86_64 = -Wl,-syslibroot $(SDK_PATH)
 LIBTOOL = libtool
 LIPO = lipo
 
@@ -48,8 +50,9 @@ default: all
 all: dist
 
 dist: FreeImage
-	cp *.a Dist
-	cp *.dylib Dist
+	mkdir -p Dist
+	mv *.a* Dist
+	mv *.dylib Dist
 	cp Source/FreeImage.h Dist
 
 FreeImage: $(STATICLIB) $(SHAREDLIB)

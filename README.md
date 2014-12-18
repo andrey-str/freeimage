@@ -1,6 +1,8 @@
 freeimage
 =========
 
-Fork of FreeImage(v3.15.4). Makefile for OSX fixed to work with Mavericks.
+Fork of FreeImage(v3.15.4).
 
-Prebuild binaries: http://anse.me/downloads/index.html
+Makefile for OSX fixed to work with any MacOS X (SDK) version.
+Tested with Mavericks and Yosemite.
+
